@@ -1,0 +1,50 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class CountryInfo {
+
+    private static Map<String, String[]> countryDataMap;
+
+    static {
+        countryDataMap = new HashMap<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("countries.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 4) {
+                    String countryName = parts[0].trim();
+                    String capitalName = parts[1].trim();
+                    String famousCityName = parts[2].trim();
+                    String nationalAnimalName = parts[3].trim();
+                    countryDataMap.put(countryName, new String[]{capitalName, famousCityName, nationalAnimalName});
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getCapital(String countryName) {
+        return countryDataMap.get(countryName)[0];
+    }
+
+    public static String getFamousCity(String countryName) {
+        return countryDataMap.get(countryName)[1];
+    }
+
+    public static String getNationalAnimal(String countryName) {
+        return countryDataMap.get(countryName)[2];
+    }
+
+    public static void main(String[] args) {
+        for (String country : countryDataMap.keySet()) {
+            String[] data = countryDataMap.get(country);
+            System.out.println(country + " - Capital: " + data[0] + ", Famous City: " + data[1] + ", National Animal: " + data[2]);
+        }
+    }
+}
